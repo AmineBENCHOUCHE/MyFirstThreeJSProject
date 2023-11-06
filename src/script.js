@@ -53,7 +53,7 @@ const texture = [
 
 const fontLoader = new FontLoader();
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-  const textGeometry = new TextGeometry("Amine BENCHOUCHE", {
+  const textGeometry = new TextGeometry("DANIA EL GNAOUI", {
     font,
     size: 0.5,
     height: 0.2,
@@ -64,9 +64,9 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
     bevelOffset: 0,
     bevelSegments: 4,
   });
-  const textGeometry2 = new TextGeometry("THREE.JS ENTHOUSIAST", {
+  const textGeometry2 = new TextGeometry("PROFESSIONAL HR", {
     font,
-    size: 0.5,
+    size: 0.4,
     height: 0.2,
     curveSegments: 5,
     bevelEnabled: true,
