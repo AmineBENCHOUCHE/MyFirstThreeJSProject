@@ -53,7 +53,7 @@ const texture = [
 
 const fontLoader = new FontLoader();
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-  const textGeometry = new TextGeometry("DANIA EL GNAOUI", {
+  const textGeometry = new TextGeometry("Amine BENCHOUCHE", {
     font,
     size: 0.5,
     height: 0.2,
@@ -64,9 +64,9 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
     bevelOffset: 0,
     bevelSegments: 4,
   });
-  const textGeometry2 = new TextGeometry("PROFESSIONAL HR", {
+  const textGeometry2 = new TextGeometry("THREE.JS ENTHOUSIAST", {
     font,
-    size: 0.4,
+    size: 0.5,
     height: 0.2,
     curveSegments: 5,
     bevelEnabled: true,
@@ -94,7 +94,20 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
   const text = new THREE.Mesh(textGeometry, textMaterial);
   const text2 = new THREE.Mesh(textGeometry2, textMaterial);
 
+  text.castShadow = true;
+  text2.castShadow = true;
+
   // Donuts geometry
+
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(5, 5),
+    new THREE.MeshBasicMaterial()
+  );
+  plane.receiveShadow = true;
+  plane.rotation.x = -Math.PI * 0.5;
+  plane.position.y = -0.5;
+
+  scene.add(plane);
 
   const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
   const sphereGeometry = new THREE.SphereGeometry(0.8);
@@ -116,11 +129,14 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
 
     const scale = Math.random();
     object.scale.set(scale, scale, scale);
+    object.castShadow = true;
     scene.add(object);
   }
   //   console.timeEnd("donuts");
 
   scene.add(text, text2);
+
+  gsap.to(text.rotation, { y: Math.cos(Math.PI) });
 });
 
 /**
@@ -134,8 +150,20 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
 // scene.add(cube);
 
 /**
+ * Light
+ */
+
+const pointLight = new THREE.PointLight(0xffffff, 5);
+pointLight.position.set(4, 4, 5);
+scene.add(pointLight);
+
+const pointLightCameraHelper = new THREE.CameraHelper(pointLight.shadow.camera);
+scene.add(pointLightCameraHelper);
+
+/**
  * Sizes
  */
+
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
@@ -143,8 +171,8 @@ const sizes = {
 
 window.addEventListener("resize", () => {
   // Update sizes
-  sizes.width = 800;
-  sizes.height = 600;
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
 
   // Update camera
   camera.aspect = sizes.width / sizes.height;
@@ -183,6 +211,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
 
 /**
  * Animate
